@@ -1,6 +1,6 @@
 [
   {
     "name": "flask-app",
-    "imageUri": "aws_account_id.dkr.ecr.region.amazonaws.com/my-ecs-app:latest"
+    "imageUri": "aws_account_id.dkr.ecr.region.amazonaws.com/flask-login-app:latest"
   }
 ]
