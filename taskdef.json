@@ -1,0 +1,20 @@
+{
+    "family": "flask-app",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": ["FARGATE"],
+    "cpu": "256",
+    "memory": "512",
+    "containerDefinitions": [
+        {
+            "name": "flask-app",
+            "image": "login-app-python",
+            "portMappings": [
+                {
+                    "containerPort": 5000,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true
+        }
+    ]
+}
