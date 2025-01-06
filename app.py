@@ -13,7 +13,7 @@ users = {
 @app.route('/')
 def home():
     if 'username' in session:
-        return f'Welcome {session["username"]}!'
+        return f'Wecome {session["username"]}!'
     return redirect('/login')
 
 @app.route('/login', methods=['GET', 'POST'])
