@@ -7,13 +7,13 @@ app.secret_key = os.getenv('SECRET_KEY', 'default-secret-key')
 
 # Simple user database (in production, use a proper database)
 users = {
-    "admin": "password123"
+    "adminn": "password123"
 }
 
 @app.route('/')
 def home():
     if 'username' in session:
-        return f'Wecome {session["username"]}!'
+        return f'Welcome {session["username"]}!'
     return redirect('/login')
 
 @app.route('/login', methods=['GET', 'POST'])
