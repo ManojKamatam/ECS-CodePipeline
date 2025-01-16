@@ -5,6 +5,8 @@ import os
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'default-secret-key')
 
+app.config['DEBUG'] = True
+
 # Simple user database (in production, use a proper database)
 users = {
     "adminn": "password123"
