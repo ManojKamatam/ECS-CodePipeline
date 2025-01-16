@@ -1,62 +1,56 @@
-from flask import Flask, render_template, request, redirect, session
 import os
 import logging
-import sys
+from flask import Flask, render_template, request, redirect, session
 
-# Configure logging first
+# Configure logging
 logging.basicConfig(
     level=logging.DEBUG,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    handlers=[logging.StreamHandler(sys.stdout)]
+    format='%(asctime)s [%(levelname)s] %(message)s'
 )
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-try:
-    app = Flask(__name__)
-    
-    # Get secret key from environment with fallback
-    app.secret_key = os.getenv('SECRET_KEY', 'dev-key-for-testing')
-    
-    logger.debug("Flask app initialized")
-    
-    # Simple user database
-    users = {
-        "adminn": "password123"
-    }
+# Initialize Flask application
+app = Flask(__name__)
 
-    @app.route('/health')
-    def health():
-        return {'status': 'healthy'}, 200
+# Secret key for session handling
+app.secret_key = os.getenv("SECRET_KEY", "default-secret-key")
+logger.debug("Flask app initialized with secret key")
 
-    @app.route('/')
-    def home():
-        if 'username' in session:
-            return f'Welcome {session["username"]}!'
-        return redirect('/login')
+# Simple user database
+users = {"admin": "password123"}
 
-    @app.route('/login', methods=['GET', 'POST'])
-    def login():
-        if request.method == 'POST':
-            username = request.form.get('username')
-            password = request.form.get('password')
-            
-            if username in users and users[username] == password:
-                session['username'] = username
-                return redirect('/')
-            return "Invalid credentials"
-        return render_template('login.html')
+@app.route("/health")
+def health():
+    return {"status": "healthy"}, 200
 
-    @app.route('/logout')
-    def logout():
-        session.pop('username', None)
-        return redirect('/login')
+@app.route("/")
+def home():
+    if "username" in session:
+        return f"Welcome {session['username']}!"
+    return redirect("/login")
 
-except Exception as e:
-    logger.exception("Failed to initialize application: %s", str(e))
-    raise
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
 
-if __name__ == '__main__':
+        if username in users and users[username] == password:
+            session["username"] = username
+            logger.debug(f"User {username} logged in successfully")
+            return redirect("/")
+        logger.warning("Invalid login attempt")
+        return "Invalid credentials", 401
+
+    return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.pop("username", None)
+    return redirect("/login")
+
+if __name__ == "__main__":
     logger.info("Starting Flask application")
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host="0.0.0.0", port=5000)
