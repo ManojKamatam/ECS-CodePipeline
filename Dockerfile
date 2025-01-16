@@ -13,5 +13,5 @@ ENV FLASK_ENV=production
 
 EXPOSE 5000
 
-# Using gunicorn with config file
-CMD ["gunicorn", "--config", "gunicorn.conf.py", "app:app"]
+# Simplified command with debug logging
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "1", "--log-level", "debug", "--capture-output", "--preload", "app:app"]
